@@ -7,11 +7,8 @@ import { v } from "convex/values";
 
 export default defineSchema(
   {
-    documents: defineTable({
-      fieldOne: v.string(),
-      fieldTwo: v.object({
-        subFieldOne: v.array(v.number()),
-      }),
+    release_prs: defineTable({
+      url: v.string(),
     }),
     // This definition matches the example query and mutation code:
     numbers: defineTable({
