@@ -83,7 +83,6 @@ async function findLatestPRMergingMainIntoRelease() {
   const { data: pullRequests } = await octokit.rest.pulls.list({
     owner: repoOwner,
     repo: repoName,
-    state: "closed",
     base: "release",
     head: `${repoOwner}:main`,
   });
