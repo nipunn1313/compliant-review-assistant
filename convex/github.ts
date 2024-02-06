@@ -16,8 +16,12 @@ export const refetchLatestReleasePR = internalAction({
       latestReleasePRUrl,
     });
 
+    const who = latestPR.user!.login;
+    const msg = `${who} asks - Plz review: ${latestReleasePRUrl}`;
     if (updated) {
-      await postToVestabuddy(`Plz Review: ${latestReleasePRUrl}`);
+      await postToVestabuddy(msg);
+    } else {
+      console.log(`Skipped reposting: ${msg}`);
     }
 
     return latestPR.html_url;
@@ -32,6 +36,10 @@ export const lilVestabuddyTest = internalAction({
 });
 
 async function postToVestabuddy(message: string) {
+  if (!process.env.VESTABUDDY_KEY) {
+    console.log(`No Vestabuddy key found. Would have posted ${message}`);
+    return;
+  }
   const httpClient = new ConvexHttpClient(
     "https://oceanic-pig-772.convex.cloud"
   );
