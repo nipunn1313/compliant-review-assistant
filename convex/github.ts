@@ -17,7 +17,7 @@ export const refetchLatestReleasePR = internalAction({
     });
 
     const who = latestPR.user!.login;
-    const msg = `${who} asks - Plz review: ${latestReleasePRUrl}`;
+    const msg = `${who} asks - Plz review: go/ship`;
     if (updated) {
       await postToVestabuddy(msg);
     } else {
