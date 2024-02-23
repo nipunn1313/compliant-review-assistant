@@ -1,30 +1,28 @@
 import { v } from "convex/values";
 import { internal } from "./_generated/api";
 import { internalAction, internalMutation, query } from "./_generated/server";
-import { Octokit } from "@octokit/rest";
 import { ConvexHttpClient } from "convex/browser";
 import { anyApi } from "convex/server";
 
-export const refetchLatestReleasePR = internalAction({
+export const updateLatestReleasePR = internalAction({
   // Validators for arguments.
-  args: {},
-
-  handler: async (ctx) => {
-    const latestPR = await findLatestPRMergingMainIntoRelease();
-    const latestReleasePRUrl = latestPR.html_url;
+  args: {
+    user: v.string(),
+    latestPrUrl: v.string()
+  },
+  handler: async (ctx, args) => {
     const updated = await ctx.runMutation(internal.github.saveLatestReleasePR, {
-      latestReleasePRUrl,
+      latestReleasePRUrl: args.latestPrUrl,
     });
 
-    const who = latestPR.user!.login;
-    const msg = `${who} asks - Plz review: go/ship`;
+    const msg = `${args.user} asks - Plz review: go/ship`;
     if (updated) {
       await postToVestabuddy(msg);
     } else {
       console.log(`Skipped reposting: ${msg}`);
     }
 
-    return latestPR.html_url;
+    return args.latestPrUrl;
   },
 });
 
@@ -80,25 +78,3 @@ export const getLatestReleasePR = query({
       .first();
   },
 });
-
-const token = process.env.GITHUB_READ_TOKEN;
-const repoOwner = "get-convex";
-const repoName = "convex";
-
-async function findLatestPRMergingMainIntoRelease() {
-  const octokit = new Octokit({ auth: token });
-
-  const { data: pullRequests } = await octokit.rest.pulls.list({
-    owner: repoOwner,
-    repo: repoName,
-    base: "release",
-    head: `${repoOwner}:main`,
-  });
-
-  if (pullRequests.length === 0) {
-    throw new Error("No pull requests found.");
-  }
-
-  const latestPR = pullRequests[0];
-  return latestPR;
-}
