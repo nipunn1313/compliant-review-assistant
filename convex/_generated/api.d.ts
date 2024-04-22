@@ -16,7 +16,6 @@ import type {
 } from "convex/server";
 import type * as github from "../github.js";
 import type * as http from "../http.js";
-import type * as myFunctions from "../myFunctions.js";
 import type * as redirectToPrs from "../redirectToPrs.js";
 
 /**
@@ -30,7 +29,6 @@ import type * as redirectToPrs from "../redirectToPrs.js";
 declare const fullApi: ApiFromModules<{
   github: typeof github;
   http: typeof http;
-  myFunctions: typeof myFunctions;
   redirectToPrs: typeof redirectToPrs;
 }>;
 export declare const api: FilterApi<

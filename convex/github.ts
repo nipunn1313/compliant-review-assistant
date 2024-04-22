@@ -8,7 +8,7 @@ export const updateLatestReleasePR = internalAction({
   // Validators for arguments.
   args: {
     user: v.string(),
-    latestPrUrl: v.string()
+    latestPrUrl: v.string(),
   },
   handler: async (ctx, args) => {
     const updated = await ctx.runMutation(internal.github.saveLatestReleasePR, {
@@ -41,10 +41,10 @@ async function postToVestabuddy(message: string) {
   const httpClient = new ConvexHttpClient(
     "https://oceanic-pig-772.convex.cloud"
   );
-  const result = await httpClient.action(anyApi.board.post, {
+  const result = await httpClient.mutation(anyApi.board.post, {
     message,
     duration: 60,
-    serviceAcctKey: process.env.VESTABUDDY_KEY,
+    serviceKey: process.env.VESTABUDDY_KEY,
   });
   return result;
 }
