@@ -15,7 +15,7 @@ export const redirectToLatestPr = httpAction(async (ctx) => {
 
 export const handleGithubPullRequestWebhook = httpAction(
   async ({ scheduler }, request) => {
-    console.log("Got request", request);
+    // console.log("Got request", request);
     const payload = await request.text();
 
     const signingSecret = process.env.GITHUB_CREATE_WEBHOOK_SECRET;
@@ -55,8 +55,14 @@ export const handleGithubPullRequestWebhook = httpAction(
           latestPrUrl: json.pull_request.html_url,
         });
       } else {
-        console.log("Ignoring unrecognized PR", json);
+        console.log("Ignoring unrecognized PR event to ", json.number);
       }
+      return new Response(null, {
+        status: 200,
+      });
+    } else if (githubEvent === "pull_request_review") {
+      const json = JSON.parse(payload);
+      console.error(`Pull request review: ${json}`);
       return new Response(null, {
         status: 200,
       });
