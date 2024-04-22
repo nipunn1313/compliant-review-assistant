@@ -66,7 +66,7 @@ export const handleGithubPullRequestWebhook = httpAction(
         const approver = json.review.user.login;
         const prUrl = json.pull_request.html_url;
         console.log(`PR ${prUrl} approved by ${approver}`);
-        runMutation(internal.github.markApproved, {
+        await runMutation(internal.github.markApproved, {
           approver,
           prUrl,
         });
