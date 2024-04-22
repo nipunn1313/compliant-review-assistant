@@ -55,14 +55,14 @@ export const handleGithubPullRequestWebhook = httpAction(
           latestPrUrl: json.pull_request.html_url,
         });
       } else {
-        console.log("Ignoring unrecognized PR event to ", json.number);
+        //console.log("Ignoring unrecognized PR event to ", json.number);
       }
       return new Response(null, {
         status: 200,
       });
     } else if (githubEvent === "pull_request_review") {
       const json = JSON.parse(payload);
-      console.error(`Pull request review: ${json}`);
+      console.log(`Pull request review: ${JSON.stringify(json)}`);
       return new Response(null, {
         status: 200,
       });
@@ -101,4 +101,3 @@ async function hmacSha256(key: string, content: string) {
     .call(digestBytes, (x) => x.toString(16).padStart(2, "0"))
     .join("");
 }
-
