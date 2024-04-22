@@ -1,7 +1,3 @@
-// OPTIONAL: Rename this file to `schema.ts` to declare the shape
-// of the data in your database.
-// See https://docs.convex.dev/database/schemas.
-
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
@@ -9,10 +5,6 @@ export default defineSchema(
   {
     release_prs: defineTable({
       url: v.string(),
-    }),
-    // This definition matches the example query and mutation code:
-    numbers: defineTable({
-      value: v.number(),
     }),
   },
   // If you ever get an error about schema mismatch
