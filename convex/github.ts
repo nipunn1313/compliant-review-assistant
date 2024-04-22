@@ -24,7 +24,7 @@ export const updateLatestReleasePR = internalMutation({
       requestor: args.requestor,
     });
 
-    ctx.scheduler.runAfter(0, internal.github.postToVestabuddy, {
+    await ctx.scheduler.runAfter(0, internal.github.postToVestabuddy, {
       requestor: args.requestor,
     });
   },
@@ -52,7 +52,7 @@ export const markApproved = internalMutation({
 
     await ctx.db.patch(releasePr._id, { approver: args.approver });
 
-    ctx.scheduler.runAfter(0, internal.github.postToVestabuddy, {
+    await ctx.scheduler.runAfter(0, internal.github.postToVestabuddy, {
       requestor: releasePr.requestor,
       approver: args.approver,
     });
