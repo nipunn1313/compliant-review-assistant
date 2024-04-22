@@ -5,7 +5,9 @@ export default defineSchema(
   {
     release_prs: defineTable({
       url: v.string(),
-    }),
+      requestor: v.optional(v.string()),
+      approver: v.optional(v.string()),
+    }).index("byUrl", ["url"]),
   },
   // If you ever get an error about schema mismatch
   // between your data and your schema, and you cannot

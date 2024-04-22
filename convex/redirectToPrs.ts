@@ -14,7 +14,7 @@ export const redirectToLatestPr = httpAction(async (ctx) => {
 });
 
 export const handleGithubPullRequestWebhook = httpAction(
-  async ({ scheduler }, request) => {
+  async ({ runMutation }, request) => {
     // console.log("Got request", request);
     const payload = await request.text();
 
@@ -50,8 +50,8 @@ export const handleGithubPullRequestWebhook = httpAction(
         json.pull_request.head.label === "get-convex:main" &&
         json.pull_request.user?.login
       ) {
-        await scheduler.runAfter(0, internal.github.updateLatestReleasePR, {
-          user: json.pull_request.user.login,
+        await runMutation(internal.github.updateLatestReleasePR, {
+          requestor: json.pull_request.user.login,
           latestPrUrl: json.pull_request.html_url,
         });
       } else {
@@ -62,7 +62,15 @@ export const handleGithubPullRequestWebhook = httpAction(
       });
     } else if (githubEvent === "pull_request_review") {
       const json = JSON.parse(payload);
-      console.log(`Pull request review: ${JSON.stringify(json)}`);
+      if (json.action === "submitted" && json.review.state == "approved") {
+        const approver = json.review.user.login;
+        const prUrl = json.pull_request.html_url;
+        console.log(`PR ${prUrl} approved by ${approver}`);
+        runMutation(internal.github.markApproved, {
+          approver,
+          prUrl,
+        });
+      }
       return new Response(null, {
         status: 200,
       });
