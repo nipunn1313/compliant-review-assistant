@@ -14,9 +14,11 @@ import type {
   FilterApi,
   FunctionReference,
 } from "convex/server";
+import type * as backfillRequestors from "../backfillRequestors.js";
 import type * as github from "../github.js";
 import type * as http from "../http.js";
 import type * as redirectToPrs from "../redirectToPrs.js";
+import type * as vesta from "../vesta.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -27,9 +29,11 @@ import type * as redirectToPrs from "../redirectToPrs.js";
  * ```
  */
 declare const fullApi: ApiFromModules<{
+  backfillRequestors: typeof backfillRequestors;
   github: typeof github;
   http: typeof http;
   redirectToPrs: typeof redirectToPrs;
+  vesta: typeof vesta;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,
