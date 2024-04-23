@@ -2,7 +2,7 @@ import { httpAction } from "./_generated/server";
 import { api, internal } from "./_generated/api";
 
 export const redirectToLatestPr = httpAction(async (ctx) => {
-  const latestPr = await ctx.runQuery(api.github.getLatestReleasePR, {});
+  const latestPr = await ctx.runQuery(api.releasePrs.getLatestReleasePR, {});
 
   if (latestPr) {
     return Response.redirect(latestPr.url, 302);
@@ -50,7 +50,7 @@ export const handleGithubPullRequestWebhook = httpAction(
         json.pull_request.head.label === "get-convex:main" &&
         json.pull_request.user?.login
       ) {
-        await runMutation(internal.github.updateLatestReleasePR, {
+        await runMutation(internal.releasePrs.updateLatestReleasePR, {
           requestor: json.pull_request.user.login,
           latestPrUrl: json.pull_request.html_url,
         });
@@ -66,7 +66,7 @@ export const handleGithubPullRequestWebhook = httpAction(
         const approver = json.review.user.login;
         const prUrl = json.pull_request.html_url;
         console.log(`PR ${prUrl} approved by ${approver}`);
-        await runMutation(internal.github.markApproved, {
+        await runMutation(internal.releasePrs.markApproved, {
           approver,
           prUrl,
         });
