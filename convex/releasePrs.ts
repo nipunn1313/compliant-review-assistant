@@ -68,3 +68,24 @@ export const getLatestReleasePR = internalQuery({
       .first();
   },
 });
+
+export const highScores = internalQuery({
+  args: {},
+
+  handler: async (ctx) => {
+    const approvals = await ctx.db.query("release_prs").collect();
+    const approverCounts = approvals.reduce(
+      (acc: Record<string, number>, { approver }) => {
+        if (approver !== undefined) {
+          acc[approver] = (acc[approver] || 0) + 1;
+        }
+        return acc;
+      },
+      {}
+    );
+    const sortedApprovers = Object.entries(approverCounts)
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count);
+    return sortedApprovers;
+  },
+});
