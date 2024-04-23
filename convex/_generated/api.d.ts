@@ -19,6 +19,7 @@ import type * as http from "../http.js";
 import type * as redirectToPrs from "../redirectToPrs.js";
 import type * as releasePrs from "../releasePrs.js";
 import type * as vesta from "../vesta.js";
+import type * as webhook from "../webhook.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -34,6 +35,7 @@ declare const fullApi: ApiFromModules<{
   redirectToPrs: typeof redirectToPrs;
   releasePrs: typeof releasePrs;
   vesta: typeof vesta;
+  webhook: typeof webhook;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,

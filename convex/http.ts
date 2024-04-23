@@ -1,5 +1,6 @@
 import { httpRouter } from "convex/server";
-import { handleGithubPullRequestWebhook, redirectToLatestPr } from "./redirectToPrs";
+import { redirectToLatestPr } from "./redirectToPrs";
+import { handleGithubPullRequestWebhook } from "./webhook";
 const http = httpRouter();
 
 http.route({
@@ -12,6 +13,7 @@ http.route({
   path: "/onPullRequestReview",
   method: "POST",
   handler: handleGithubPullRequestWebhook,
-})
+});
 
 export default http;
+

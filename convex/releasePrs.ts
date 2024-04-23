@@ -1,6 +1,6 @@
 import { v } from "convex/values";
 import { internal } from "./_generated/api";
-import { internalMutation, query } from "./_generated/server";
+import { internalMutation, internalQuery } from "./_generated/server";
 
 export const updateLatestReleasePR = internalMutation({
   // Validators for arguments.
@@ -57,7 +57,7 @@ export const markApproved = internalMutation({
   },
 });
 
-export const getLatestReleasePR = query({
+export const getLatestReleasePR = internalQuery({
   args: {},
 
   handler: async (ctx) => {
