@@ -50,10 +50,13 @@ export const markApproved = internalMutation({
 
     await ctx.db.patch(releasePr._id, { approver: args.approver });
 
+    /*
+     * this got rather annoying
     await ctx.scheduler.runAfter(0, internal.vesta.postToVestabuddy, {
       requestor: releasePr.requestor,
       approver: args.approver,
     });
+    */
   },
 });
 
