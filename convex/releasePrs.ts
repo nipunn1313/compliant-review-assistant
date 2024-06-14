@@ -89,6 +89,21 @@ export const highScores = internalQuery({
     const sortedApprovers = Object.entries(approverCounts)
       .map(([name, count]) => ({ name, count }))
       .sort((a, b) => b.count - a.count);
-    return sortedApprovers;
+
+    const requestors = await ctx.db.query("release_prs").collect();
+    const requestor_counts = requestors.reduce(
+      (acc: Record<string, number>, { requestor }) => {
+        if (requestor !== undefined) {
+          acc[requestor] = (acc[requestor] || 0) + 1;
+        }
+        return acc;
+      },
+      {}
+    );
+    const sortedRequestors = Object.entries(requestor_counts)
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count);
+
+    return { sortedApprovers, sortedRequestors };
   },
 });
